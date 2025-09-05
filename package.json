@@ -23,6 +23,7 @@
     "cli:ingest": "npm run cli ingest"
   },
   "dependencies": {
+    "@chroma-core/default-embed": "^0.1.8",
     "@langchain/community": "^0.3.54",
     "@langchain/core": "^0.3.74",
     "@langchain/langgraph": "^0.4.9",
