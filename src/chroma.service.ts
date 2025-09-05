@@ -1,40 +1,49 @@
-import { ChromaClient, Collection } from 'chromadb';
+import { ChromaClient, CloudClient } from 'chromadb';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ChromaService implements OnModuleInit {
-  private readonly client: ChromaClient;
-  private collection: Collection;
+  private readonly client: ChromaClient | CloudClient;
 
   constructor(private readonly configService: ConfigService) {
-    const chromadbUrlEnv = this.configService.get<string>('CHROMADB_URL')!;
+    const apiKey = this.configService.get<string>('CHROMADB_API_KEY');
     const tenant = this.configService.get<string>('CHROMADB_TENANT')!;
     const database = this.configService.get<string>('CHROMADB_DATABASE')!;
-    const { hostname: host, port } = new URL(chromadbUrlEnv);
-    this.client = new ChromaClient({
-      host,
-      port: Number(port),
-      tenant,
-      database,
-    });
+    if (apiKey) {
+      this.client = new CloudClient({ tenant, database, apiKey });
+    } else {
+      const url = this.configService.get<string>('CHROMADB_URL')!;
+      const { hostname: host, port } = new URL(url);
+      this.client = new ChromaClient({
+        host,
+        port: Number(port),
+        tenant,
+        database,
+      });
+    }
   }
 
   async onModuleInit() {
     await this.client.countCollections();
+  }
+
+  getCollection() {
     const collectionName = this.configService.get<string>('CHROMADB_COLLECTION')!;
-    this.collection = await this.client.getOrCreateCollection({ name: collectionName });
+    return this.client.getOrCreateCollection({
+      name: collectionName,
+      embeddingFunction: undefined,
+    });
   }
 
   async ingest(documents: string[], embeddings: number[][]) {
     const ids = documents.map((_, index) => index.toString());
-    await this.collection.add({ ids, embeddings, documents });
+    const collection = await this.getCollection();
+    return collection.add({ ids, embeddings, documents });
   }
 
-  query(queryEmbedding: number[]) {
-    return this.collection.query({
-      queryEmbeddings: [queryEmbedding],
-      nResults: 5,
-    });
+  async query(vector: number[]) {
+    const collection = await this.getCollection();
+    return collection.query({ queryEmbeddings: [vector], nResults: 5 });
   }
 }
