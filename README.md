@@ -62,14 +62,16 @@ graph TD
 ### Prerequisites
 - Node.js 18+
 - Docker & Docker Compose
-- OpenAI API key
-- Telegram Bot token
+- **OpenAI API key** ([Get one here](https://platform.openai.com/api-keys))
+- **Telegram Bot token** ([Create bot with @BotFather](https://t.me/botfather))
+- **Unstructured.io account** ([Sign up](https://unstructured.io)) - for text processing
+- **ChromaDB Cloud account** (optional) - or use local Docker instance
 
 ### Installation
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/book-ai-telegram-assistant.git
+git clone https://github.com/sargonpiraev/book-ai-telegram-assistant.git
 cd book-ai-telegram-assistant
 
 # Install dependencies
@@ -78,29 +80,6 @@ npm install
 # Setup environment
 cp .env.example .env
 # Edit .env with your API keys
-```
-
-### Configuration
-
-Create `.env` file with:
-
-```env
-# Required
-OPENAI_API_KEY=your_openai_api_key_here
-TELEGRAM_BOT_TOKEN=your_telegram_bot_token_here
-
-# ChromaDB Configuration
-CHROMADB_URL=http://localhost:8000
-CHROMADB_TENANT=default_tenant
-CHROMADB_DATABASE=default_database
-CHROMADB_COLLECTION=default_collection
-CHROMADB_API_KEY=x
-
-# Book Source
-BOOK_URL=https://www.gutenberg.org/files/2852/2852-0.txt
-
-# Unstructured.io (for text processing)
-UNSTRUCTURED_API_KEY=x
 ```
 
 ### Run Application
@@ -152,59 +131,12 @@ Browse [Project Gutenberg](https://www.gutenberg.org) for 70,000+ free books.
 - *"What are the main themes in the story?"*
 - *"Explain Holmes' deduction methods"*
 
-## 🔧 API Endpoints
+## 🔧 Usage
 
-```typescript
-POST /api/prompt
-{
-  "query": "Your question about the book"
-}
-```
-
-**WebSocket Support:**
-```typescript
-// Connect to WebSocket
-socket.emit('message', { text: 'Your question' });
-socket.on('response', (data) => console.log(data));
-```
-
-## 🐳 Docker Deployment
-
-```bash
-# Build and run
-docker-compose up --build
-
-# Production deployment
-docker-compose -f docker-compose.prod.yml up -d
-```
-
-## 🧪 Testing
-
-```bash
-# Unit tests
-npm test
-
-# E2E tests  
-npm run test:e2e
-
-# Coverage
-npm run test:cov
-```
-
-## 📊 Performance
-
-- **Embedding Generation**: ~2-3 minutes for full book
-- **Query Response Time**: ~1-2 seconds
-- **Memory Usage**: ~200MB (with embeddings loaded)
-- **Supported Concurrent Users**: 100+
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
+**Telegram Bot Interface:**
+- Start a chat with your bot in Telegram
+- Send any question about the book
+- Get AI-powered responses based on book content
 
 ## 📄 License
 
