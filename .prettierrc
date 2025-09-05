@@ -1,0 +1,6 @@
+{
+  "singleQuote": true,
+  "trailingComma": "all",
+  "maxLineLength": 120,
+  "printWidth": 120
+}
