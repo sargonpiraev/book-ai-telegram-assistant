@@ -181,6 +181,24 @@ Make sure ChromaDB is running:
 docker-compose up -d
 ```
 
+## ☁️ Heroku Deployment
+
+**Quick Deploy:**
+1. Create Heroku app: `heroku create your-app-name`
+2. Set config vars:
+```bash
+heroku config:set OPENAI_API_KEY=your_key
+heroku config:set TELEGRAM_BOT_TOKEN=your_token
+heroku config:set BOOK_URL=https://www.gutenberg.org/files/2852/2852-0.txt
+heroku config:set CHROMADB_URL=your_chromadb_cloud_url
+heroku config:set NPM_CONFIG_LEGACY_PEER_DEPS=true
+```
+3. Deploy: `git push heroku main`
+
+**Notes:** 
+- The `.npmrc` file ensures `--legacy-peer-deps` is used during build
+- Required dependencies (`ts-node`, `typescript`, `@chroma-core/default-embed`) are in production dependencies for CLI commands
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
