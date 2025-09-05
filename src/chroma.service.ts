@@ -1,6 +1,14 @@
-import { ChromaClient, CloudClient, Collection } from 'chromadb';
+import { ChromaClient, CloudClient, Collection, EmbeddingFunction } from 'chromadb';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+
+// Custom empty embedding function to avoid loading default dependencies
+class NoOpEmbeddingFunction implements EmbeddingFunction {
+  async generate(texts: string[]): Promise<number[][]> {
+    // Return empty embeddings - we provide our own via OpenAI
+    return texts.map(() => []);
+  }
+}
 
 @Injectable()
 export class ChromaService implements OnModuleInit {
@@ -27,10 +35,13 @@ export class ChromaService implements OnModuleInit {
 
   async onModuleInit() {
     await this.client.countCollections();
-    const collectionName = this.configService.get<string>('CHROMADB_COLLECTION')!;
+    const collectionName = this.configService.get<string>(
+      'CHROMADB_COLLECTION',
+    )!;
     this.collection = await this.client.getOrCreateCollection({
       name: collectionName,
-      embeddingFunction: undefined,
+      // Use custom no-op embedding function to avoid loading heavy dependencies
+      embeddingFunction: new NoOpEmbeddingFunction(),
     });
   }
 

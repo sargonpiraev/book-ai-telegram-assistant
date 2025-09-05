@@ -197,7 +197,9 @@ heroku config:set NPM_CONFIG_LEGACY_PEER_DEPS=true
 
 **Notes:** 
 - The `.npmrc` file ensures `--legacy-peer-deps` is used during build
-- Required dependencies (`ts-node`, `typescript`, `@chroma-core/default-embed`) are in production dependencies for CLI commands
+- Required dependencies (`ts-node`, `typescript`) are in production dependencies for CLI commands
+- `.slugignore` excludes heavy ML dependencies (ONNX, Hugging Face) to keep under 500MB limit
+- Custom NoOpEmbeddingFunction avoids loading default ChromaDB embeddings (we use OpenAI instead)
 
 ## 📄 License
 
