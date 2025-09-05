@@ -4,9 +4,9 @@ import { ConfigService } from '@nestjs/config';
 
 // Custom empty embedding function to avoid loading default dependencies
 class NoOpEmbeddingFunction implements EmbeddingFunction {
-  async generate(texts: string[]): Promise<number[][]> {
+  generate(texts: string[]): Promise<number[][]> {
     // Return empty embeddings - we provide our own via OpenAI
-    return texts.map(() => []);
+    return Promise.resolve(texts.map(() => []));
   }
 }
 
@@ -35,9 +35,7 @@ export class ChromaService implements OnModuleInit {
 
   async onModuleInit() {
     await this.client.countCollections();
-    const collectionName = this.configService.get<string>(
-      'CHROMADB_COLLECTION',
-    )!;
+    const collectionName = this.configService.get<string>('CHROMADB_COLLECTION')!;
     this.collection = await this.client.getOrCreateCollection({
       name: collectionName,
       // Use custom no-op embedding function to avoid loading heavy dependencies
