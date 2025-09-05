@@ -13,7 +13,7 @@ type Chunk = {
     languages: string[];
     filename: string;
     filetype: string;
-  },
+  };
 };
 
 @Injectable()
@@ -22,10 +22,7 @@ export class UnstructuredService {
 
   constructor(private readonly configService: ConfigService) {
     const apiKey = this.configService.get<string>('UNSTRUCTURED_API_KEY')!;
-    this.client = new UnstructuredClient({
-      security: { apiKeyAuth: apiKey },
-      // debugLogger: console,
-    });
+    this.client = new UnstructuredClient({ security: { apiKeyAuth: apiKey } });
   }
 
   getChunks(bookText: string): Promise<Chunk[]> {

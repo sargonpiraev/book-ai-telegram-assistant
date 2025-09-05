@@ -5,7 +5,7 @@ import { ChatPromptTemplate } from '@langchain/core/prompts';
 export class OpenAIService {
   private readonly embedder: OpenAIEmbeddings;
   private readonly chatOpenAI: ChatOpenAI;
-  
+
   constructor() {
     this.chatOpenAI = new ChatOpenAI({ model: 'gpt-4o-mini' });
     this.embedder = new OpenAIEmbeddings({ model: 'text-embedding-3-small' });

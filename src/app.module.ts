@@ -13,13 +13,6 @@ import { BookService } from './book.service';
   imports: [configModule, telegramModule],
   controllers: [AppController],
   exports: [AppService],
-  providers: [
-    AppService,
-    ChromaService,
-    AppGateway,
-    UnstructuredService,
-    OpenAIService,
-    BookService,
-  ],
+  providers: [AppService, ChromaService, AppGateway, UnstructuredService, OpenAIService, BookService],
 })
 export class AppModule {}

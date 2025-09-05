@@ -8,7 +8,6 @@ export class IngestCommand extends CommandRunner {
   }
 
   async run() {
-    
     await this.appService.ingest();
   }
 }
