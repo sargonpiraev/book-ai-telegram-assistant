@@ -1,10 +1,11 @@
-import { ChromaClient, CloudClient } from 'chromadb';
+import { ChromaClient, CloudClient, Collection } from 'chromadb';
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ChromaService implements OnModuleInit {
   private readonly client: ChromaClient | CloudClient;
+  private readonly collection: Collection;
 
   constructor(private readonly configService: ConfigService) {
     const apiKey = this.configService.get<string>('CHROMADB_API_KEY');
@@ -26,11 +27,8 @@ export class ChromaService implements OnModuleInit {
 
   async onModuleInit() {
     await this.client.countCollections();
-  }
-
-  getCollection() {
     const collectionName = this.configService.get<string>('CHROMADB_COLLECTION')!;
-    return this.client.getOrCreateCollection({
+    this.collection = await this.client.getOrCreateCollection({
       name: collectionName,
       embeddingFunction: undefined,
     });
@@ -38,12 +36,10 @@ export class ChromaService implements OnModuleInit {
 
   async ingest(documents: string[], embeddings: number[][]) {
     const ids = documents.map((_, index) => index.toString());
-    const collection = await this.getCollection();
-    return collection.add({ ids, embeddings, documents });
+    return this.collection.add({ ids, embeddings, documents });
   }
 
   async query(vector: number[]) {
-    const collection = await this.getCollection();
-    return collection.query({ queryEmbeddings: [vector], nResults: 5 });
+    return this.collection.query({ queryEmbeddings: [vector], nResults: 5 });
   }
 }

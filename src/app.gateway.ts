@@ -13,7 +13,6 @@ export class AppGateway {
 
   @On('text')
   async onText(@Message('text') text: string, @Ctx() ctx: Context) {
-    console.log(text);
     const result = await this.appService.prompt(text);
     await ctx.reply(result);
   }
