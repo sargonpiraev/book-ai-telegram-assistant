@@ -74,12 +74,35 @@ graph TD
 git clone https://github.com/sargonpiraev/book-ai-telegram-assistant.git
 cd book-ai-telegram-assistant
 
-# Install dependencies
-npm install
+# Install dependencies (resolve peer dependency conflicts)
+npm install --legacy-peer-deps
 
 # Setup environment
 cp .env.example .env
 # Edit .env with your API keys
+```
+
+### Configuration
+
+Edit `.env` file with your API keys:
+
+```env
+# Required
+OPENAI_API_KEY=your_openai_api_key_here
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token_here
+
+# ChromaDB Configuration
+CHROMADB_URL=http://localhost:8000
+CHROMADB_TENANT=default_tenant
+CHROMADB_DATABASE=default_database
+CHROMADB_COLLECTION=default_collection
+CHROMADB_API_KEY=x
+
+# Book Source
+BOOK_URL=https://www.gutenberg.org/files/2852/2852-0.txt
+
+# Unstructured.io (for text processing)
+UNSTRUCTURED_API_KEY=x
 ```
 
 ### Run Application
@@ -137,6 +160,26 @@ Browse [Project Gutenberg](https://www.gutenberg.org) for 70,000+ free books.
 - Start a chat with your bot in Telegram
 - Send any question about the book
 - Get AI-powered responses based on book content
+
+## 🔧 Troubleshooting
+
+**Dependency conflicts:**
+If you encounter OpenAI version conflicts during installation, use:
+```bash
+npm install --legacy-peer-deps
+```
+
+**Missing dependencies:**
+If build fails with missing `@langchain/core`, install it:
+```bash
+npm install @langchain/core --legacy-peer-deps
+```
+
+**ChromaDB connection issues:**
+Make sure ChromaDB is running:
+```bash
+docker-compose up -d
+```
 
 ## 📄 License
 

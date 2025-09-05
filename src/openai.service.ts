@@ -7,8 +7,8 @@ export class OpenAIService {
   private readonly chatOpenAI: ChatOpenAI;
   
   constructor() {
-    this.chatOpenAI = new ChatOpenAI({ model: 'gpt-4o-mini', verbose: true });
-    this.embedder = new OpenAIEmbeddings({ model: 'text-embedding-3-small', verbose: true });
+    this.chatOpenAI = new ChatOpenAI({ model: 'gpt-4o-mini' });
+    this.embedder = new OpenAIEmbeddings({ model: 'text-embedding-3-small' });
   }
 
   embedDocuments(documents: string[]) {
