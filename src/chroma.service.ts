@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class ChromaService implements OnModuleInit {
   private readonly client: ChromaClient | CloudClient;
-  private readonly collection: Collection;
+  private collection: Collection;
 
   constructor(private readonly configService: ConfigService) {
     const apiKey = this.configService.get<string>('CHROMADB_API_KEY');
